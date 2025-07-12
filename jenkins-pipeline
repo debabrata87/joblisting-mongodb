@@ -1,0 +1,89 @@
+pipeline{
+    agent any 
+    tools {
+        jdk 'jdk_21'
+        maven 'maven_3_9_10'
+    }
+    environment {
+        DOCKER_TLS_VERIFY="1"
+        DOCKER_HOST="tcp://192.168.99.100:2376"
+        DOCKER_CERT_PATH="C:\\Users\\Debabrata\\.docker\\machine\\machines\\default"
+        DOCKER_MACHINE_NAME="default"
+        PATH = "${env.PATH};C:\\Program Files\\Docker Toolbox"
+        DOCKERHUB_USERNAME = 'debabrata87'   // your Docker username
+    }
+    
+    stages{
+        stage('Build Maven'){
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/debabrata87/joblisting-mongodb']])
+                //sh 'mvn clean install'
+                bat 'mvn clean install'
+                
+            }
+        }
+        stage('build docker image'){
+            steps {
+                echo "Building Docker image on Windows agent"
+                bat 'docker version'
+                bat "docker build -t debabrata87/joblisting-mongodb:latest ."
+            }
+        }
+        
+        stage('Clean Docker Credentials') {
+            steps {
+                bat '''
+                    echo Deleting Docker config to invalidate saved credentials...
+                    if exist "%USERPROFILE%\\.docker\\config.json" (
+                        del "%USERPROFILE%\\.docker\\config.json"
+                        echo Deleted: %USERPROFILE%\\.docker\\config.json
+                    ) else (
+                        echo No config.json found to delete.
+                    )
+                '''
+            }
+        }
+        
+        
+        
+         stage('push docker image'){
+            steps {
+                echo "Pushing Docker image on Windows agent"
+      
+      			bat 'docker login -u debabrata87 -p dckr_pat_HqABOxuZP5XECzZS__T9ADmoCi4'
+      			bat 'docker push debabrata87/joblisting-mongodb:latest'
+      			bat 'del %USERPROFILE%\\.docker\\config.json'
+      
+                //withCredentials([string(credentialsId: 'docker-debabrata87-pwd-v2', variable: 'docker-debabrata87-pwd-v2')]) {
+                  //  bat 'docker login -u debabrata87 -p ${docker-debabrata87-pwd-v2}'
+                  //	bat 'docker push debabrata87/dev-ops-automation:latest'
+                //}
+           
+           
+           		//withCredentials([string(credentialsId: 'dockerhub-token', variable: 'DOCKERHUB_PASSWORD')]) {
+                      
+                  //   bat """ echo Secret prefix:%DOCKERHUB_PASSWORD:~0,35%**** """
+
+                   //  bat '''
+                   //     echo %DOCKERHUB_PASSWORD% > docker_pass.txt
+                   //     type docker_pass.txt
+                   //     docker login -u %DOCKERHUB_USERNAME% --password-stdin < docker_pass.txt
+                   //     del docker_pass.txt
+                   // '''
+                     
+                    //  bat 'docker push debabrata87/dev-ops-automation:latest'
+				//}
+               
+                
+            }
+         }
+    }
+    post {
+            success {
+                echo 'Pipeline completed successfully!'
+            }
+            failure {
+                echo 'Pipeline failed!'
+            }
+    }
+}
