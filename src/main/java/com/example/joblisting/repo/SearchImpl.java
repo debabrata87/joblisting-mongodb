@@ -9,6 +9,7 @@ import com.example.joblisting.model.Post;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
+import jdk.internal.org.jline.terminal.TerminalBuilder.SystemOutput;
 
 import java.util.Arrays;
 
@@ -23,7 +24,7 @@ import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
 
 @Component
-public class SearchImpl implements Search{
+public class SearchImpl implements SearchRepository{
 	
 	@Autowired
 	MongoClient mongoClient ;
@@ -55,7 +56,7 @@ public class SearchImpl implements Search{
 			
 			result.forEach( doc -> listPost.add( conv.read(Post.class, doc)));
 
-		
+		    listPost.stream().forEach((Post p)-> System.out.print( p.toString()) );
 			return listPost;
 	}
 

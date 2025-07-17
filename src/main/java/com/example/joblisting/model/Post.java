@@ -1,6 +1,8 @@
 package com.example.joblisting.model;
 
 import java.util.Arrays;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,7 +15,14 @@ public class Post {
     private String techs[];
 
     public Post() {
+    	
     }
+    
+    public Post(String profile, String desc) {
+    	this.profile=profile;
+    	this.desc=desc;
+    }
+
 
     public String getProfile() {
         return profile;
@@ -49,11 +58,14 @@ public class Post {
 
     @Override
     public String toString() {
+    	StringBuffer bf=new StringBuffer();
+    	Arrays.stream(techs).forEach( (String s)-> bf.append(s+",") );
         return "Post{" +
                 "profile='" + profile + '\'' +
                 ", desc='" + desc + '\'' +
                 ", exp=" + exp +
-                ", techs=" + Arrays.toString(techs) +
-                '}';
+                //", techs=" + Arrays.toString(techs)+
+                ", techs =" + bf.substring(0,bf.length()-1) +
+                " }";
     }
 }
