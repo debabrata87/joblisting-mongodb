@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.example.joblisting.model.Post;
 import com.example.joblisting.repo.PostRepository;
 import com.example.joblisting.repo.SearchRepository;
+import com.example.joblisting.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest  // Loads the entire Spring context, including repositories
@@ -34,6 +35,9 @@ public class JobApplicationTestMockMvcActualRepoCall {
 	
 	@Autowired
 	private SearchRepository repo2;
+	
+	@Autowired
+	private UserService usrService;
 	
 	@Autowired
 	private ObjectMapper objectMapper; // For converting objects to JSON
@@ -64,6 +68,6 @@ public class JobApplicationTestMockMvcActualRepoCall {
 		mockMvc.perform(get("/filterjobpost/{searchtext}", searchText)) // Simulate GET request to
 																		// /jobs/filter/{searchtext}
 				.andExpect(status().isOk()) // Check HTTP status is 200 OK
-				.andExpect(jsonPath("$[0].profile").value("Block Chain Developer ")); 
+				.andExpect(jsonPath("$[0].profile").value("Block Chain Developer")); 
 	}
 }

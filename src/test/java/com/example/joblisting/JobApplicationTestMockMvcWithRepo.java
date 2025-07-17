@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.example.joblisting.model.Post;
 import com.example.joblisting.repo.PostRepository;
 import com.example.joblisting.repo.SearchRepository;
+import com.example.joblisting.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest  // Loads the entire Spring context, including repositories
@@ -34,6 +35,8 @@ public class JobApplicationTestMockMvcWithRepo {
 	
 	@MockBean
 	private SearchRepository repo2;
+	@Autowired
+	private UserService usrService;
 	
 	@Autowired
 	private ObjectMapper objectMapper; // For converting objects to JSON

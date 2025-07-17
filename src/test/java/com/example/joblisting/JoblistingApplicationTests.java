@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.joblisting.controller.PostController;
 import com.example.joblisting.repo.PostRepository;
 import com.example.joblisting.repo.SearchRepository;
+import com.example.joblisting.service.UserService;
 import com.example.joblisting.service.UtilityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -37,6 +38,9 @@ class JoblistingApplicationTests {
 
 	@MockBean
 	private SearchRepository repo2;
+	
+	@MockBean
+	private UserService usrService;
 	
 	@Autowired
 	UtilityService utilService;
