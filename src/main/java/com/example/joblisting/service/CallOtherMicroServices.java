@@ -7,18 +7,21 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
+
+
 @Service
 public class CallOtherMicroServices {
 
 	@Autowired
 	private RestTemplate restTemplate;
-
+	
 	@Autowired
 	private WebClient.Builder webClientBuilder;
-
+	
+	
 	@CircuitBreaker(name = "externalService", fallbackMethod = "fallbackMethodV1" )
 	public String callExternalServiceV1(String name) {
-		String url = "http://localhost:8085/api/greet/" + name; // Replace with actual URL
+		String url = "http://localhost:8085/greetv1/" + name; // Replace with actual URL
 		try {
 			return restTemplate.getForObject(url, String.class); // Make a call to another service
 

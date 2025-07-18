@@ -71,6 +71,14 @@
 		</dependency>
 
 		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		    <version>4.5.13</version> <!-- You can choose the latest version -->
+		</dependency>
+		
+		
+		
+		<dependency>
     		<groupId>io.springfox</groupId>
     		<artifactId>springfox-swagger-ui</artifactId>
     		<version>2.9.2</version>
