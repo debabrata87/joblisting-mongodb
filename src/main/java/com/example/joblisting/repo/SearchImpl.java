@@ -8,9 +8,6 @@ import java.util.List;
 import com.example.joblisting.model.Post;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-
-import jdk.internal.org.jline.terminal.TerminalBuilder.SystemOutput;
-
 import java.util.Arrays;
 
 import org.bson.Document;
