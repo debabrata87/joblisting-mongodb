@@ -7,19 +7,45 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
-
-
 @Service
 public class CallOtherMicroServices {
 
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	@Autowired
 	private WebClient.Builder webClientBuilder;
-	
-	
-	@CircuitBreaker(name = "externalService", fallbackMethod = "fallbackMethodV1" )
+
+	private final ExternalServiceClient externalServiceClient;
+
+	@Autowired
+	public CallOtherMicroServices(ExternalServiceClient externalServiceClient) {
+		this.externalServiceClient = externalServiceClient;
+	}
+
+	@CircuitBreaker(name = "externalService", fallbackMethod = "fallbackMethodV3")
+	public String callExternalServiceV3(String name) {
+
+		try {
+			return " From Feign : "+ externalServiceClient.greetV1(name);
+
+		} catch (Exception e) {
+			// Log the exception for debugging purposes
+			e.printStackTrace(); // Or use a logger: log.error("Error calling external service", e);
+
+			// Rethrow the exception so the circuit breaker can be triggered
+			throw new RuntimeException("Error calling external service via Feign", e);
+		}
+	}
+
+	public String fallbackMethodV3(Exception ex) {
+
+		System.out.println("Fallback method triggered for Fiegn: " + ex.getMessage());
+		ex.printStackTrace(); // Log the stack trace
+		return "Service Service DevOpsDemo greet endpoint is temporarily unavailable. Please try again later With Feign!";
+	}
+
+	@CircuitBreaker(name = "externalService", fallbackMethod = "fallbackMethodV1")
 	public String callExternalServiceV1(String name) {
 		String url = "http://localhost:8085/greetv1/" + name; // Replace with actual URL
 		try {

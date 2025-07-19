@@ -3,6 +3,8 @@ package com.example.joblisting.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,19 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.joblisting.model.Post;
 import com.example.joblisting.repo.PostRepository;
 import com.example.joblisting.repo.SearchRepository;
 import com.example.joblisting.service.CallOtherMicroServices;
+
 import com.example.joblisting.service.UserService;
 import com.example.joblisting.service.UtilityService;
-
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-
-import javax.servlet.http.HttpServletResponse;
+//import jakarta.servlet.http.HttpServletResponse;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
@@ -45,12 +43,14 @@ public class PostController {
 	@Autowired
 	private CallOtherMicroServices otherMicroService;
 
+	
 	@ApiIgnore
 	@RequestMapping(value = "/")
 	public static void redirect(HttpServletResponse res) throws IOException {
 		res.sendRedirect("/swagger-ui.html");
 	}
 
+	
 	@GetMapping("/welcome/{name}")
 	public String greet(@PathVariable String name) {
 		return "App Name : Job Listing ,  User Name : " + name + "!";
@@ -66,6 +66,13 @@ public class PostController {
 	@GetMapping("/welcomev3/{name}")
 	public String callAnotherServiceV2(@PathVariable("name") String name) {
 		return otherMicroService.callExternalServiceV2(name);
+	}
+
+	@GetMapping("/welcomev4/{name}")
+	public String callAnotherServiceV3(@PathVariable("name") String name) {
+		// This is with Feign Client
+		return otherMicroService.callExternalServiceV3(name);
+
 	}
 
 	@GetMapping(value = "/seejobpost")
