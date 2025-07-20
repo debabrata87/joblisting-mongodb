@@ -27,7 +27,7 @@ public class CallOtherMicroServices {
 	public String callExternalServiceV3(String name) {
 
 		try {
-			return " From Feign : "+ externalServiceClient.greetV1(name);
+			return "From Feign : "+ externalServiceClient.greetV1(name);
 
 		} catch (Exception e) {
 			// Log the exception for debugging purposes
