@@ -31,7 +31,7 @@ public class CallOtherMicroServices {
 
 	@CircuitBreaker(name = "externalService", fallbackMethod = "fallbackMethodV1")
 	public String callExternalServiceV1(String name) {
-		String url = "http://localhost:8085/greetv1/" + name; // Replace with actual URL
+		String url = "http://localhost:8085/devopsdemo/greetv1/" + name; // Replace with actual URL
 		try {
 			return restTemplate.getForObject(url, String.class); // Make a call to another service
 
@@ -54,7 +54,7 @@ public class CallOtherMicroServices {
 
 	@CircuitBreaker(name = "externalService", fallbackMethod = "fallbackMethodV2")
 	public String callExternalServiceV2(String name) {
-		return webClientBuilder.baseUrl("http://localhost:8085").build().get().uri("/greetv2/" + name).retrieve()
+		return webClientBuilder.baseUrl("http://localhost:8085").build().get().uri("/devopsdemo/greetv2/" + name).retrieve()
 				.bodyToMono(String.class).block();
 	}
 
@@ -91,8 +91,8 @@ public class CallOtherMicroServices {
 			ResourceAccessException.class }, maxAttempts = 3, backoff = @Backoff(delay = 2000, multiplier = 2))
 	public String callExternalServiceV4(String name) {
 		
-		System.out.println("Triggering  callExternalServiceV4 \n");
-		String url = "http://localhost:8085/greetv1/" + name;
+		System.out.println("Triggering callExternalServiceV4 \n");
+		String url = "http://localhost:8085/devopsdemo/greetv1/" + name;
 		return restTemplate.getForObject(url, String.class);
 	}
 

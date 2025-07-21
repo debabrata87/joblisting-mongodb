@@ -27,6 +27,7 @@ import com.example.joblisting.service.UtilityService;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
+@RequestMapping("/joblisting")
 public class PostController {
 
 	@Autowired
@@ -86,7 +87,7 @@ public class PostController {
 	@GetMapping(value = "/filterjobpost/{searchtext}")
 	public List<Post> filterJobPost(@PathVariable String searchtext) {
 
-		// Invoke-RestMethod -Uri "http://localhost:8086/filterjobpost/kolkata" -Method
+		// Invoke-RestMethod -Uri "http://localhost:8086/joblisting/filterjobpost/kolkata" -Method
 		// Get
 		return repo2.searchJobPost(searchtext);
 	}
@@ -100,7 +101,7 @@ public class PostController {
 		 * "spring mvc", "banking payment","plsql","data analytics") } | ConvertTo-Json
 		 * -Depth 3
 		 * 
-		 * Invoke-RestMethod -Uri "http://localhost:8086/addjobpost" ` -Method Post `
+		 * Invoke-RestMethod -Uri "http://localhost:8086/joblisting/addjobpost" ` -Method Post `
 		 * -Body $body ` -ContentType "application/json"
 		 */
 
@@ -114,7 +115,7 @@ public class PostController {
 	@PutMapping("/updatejobpostexp")
 	public String updateStatus(@RequestParam String profile, @RequestParam String desc, @RequestParam int exp) {
 
-		// Invoke-RestMethod -Uri "http://localhost:8086/updatejobpostexp?profile=Block
+		// Invoke-RestMethod -Uri "http://localhost:8086/joblisting/updatejobpostexp?profile=Block
 		// Chain Developer &desc=Kolkata Block Chain Developer Test 1&exp=10" -Method
 		// Put
 
@@ -125,7 +126,7 @@ public class PostController {
 	@DeleteMapping("/deletejobpostexp")
 	public String deleteJobPost(@RequestParam String profile, @RequestParam String desc) {
 
-		// Invoke-RestMethod -Uri "http://localhost:8086/deletejobpostexp?profile=Block
+		// Invoke-RestMethod -Uri "http://localhost:8086/joblisting/deletejobpostexp?profile=Block
 		// Chain Developer&desc=Kolkata Block Chain Developer Test 1" -Method Delete
 
 		long deleted = userService.deleteUserByProfileAndDex(profile, desc);

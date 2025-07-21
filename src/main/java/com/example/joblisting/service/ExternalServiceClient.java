@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "devops-demo")
 public interface ExternalServiceClient {
 
-    @GetMapping("/greetv1/{name}")
+    @GetMapping("devopsdemo/greetv1/{name}")
     String greetV1(@PathVariable("name") String name);
 }
