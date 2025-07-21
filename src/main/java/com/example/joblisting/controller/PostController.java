@@ -43,14 +43,12 @@ public class PostController {
 	@Autowired
 	private CallOtherMicroServices otherMicroService;
 
-	
 	@ApiIgnore
 	@RequestMapping(value = "/")
 	public static void redirect(HttpServletResponse res) throws IOException {
 		res.sendRedirect("/swagger-ui.html");
 	}
 
-	
 	@GetMapping("/welcome/{name}")
 	public String greet(@PathVariable String name) {
 		return "App Name : Job Listing ,  User Name : " + name + "!";
@@ -73,6 +71,11 @@ public class PostController {
 		// This is with Feign Client
 		return otherMicroService.callExternalServiceV3(name);
 
+	}
+
+	@GetMapping("/welcomev5/{name}")
+	public String callAnotherServiceV4(@PathVariable("name") String name) {
+		return otherMicroService.callExternalServiceV4(name);
 	}
 
 	@GetMapping(value = "/seejobpost")

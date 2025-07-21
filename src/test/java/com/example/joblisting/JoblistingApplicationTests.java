@@ -49,6 +49,7 @@ class JoblistingApplicationTests {
 	private ObjectMapper objectMapper; // For converting objects to JSON
 
 	
+	/*
 	@TestConfiguration
     static class TestConfig {
 
@@ -59,6 +60,7 @@ class JoblistingApplicationTests {
             // Or: return Mockito.mock(UtilityService.class);
         }
     }
+	*/
 	
 	@BeforeEach
 	void setUp() {
