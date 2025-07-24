@@ -52,6 +52,7 @@ public class PostController {
 
 	@GetMapping("/welcome/{name}")
 	public String greet(@PathVariable String name) {
+		// Invoke-RestMethod -Uri "http://localhost:8086/joblisting/welcome/Debabrata" -Method Get
 		return "App Name : Job Listing ,  User Name : " + name + "!";
 	}
 
@@ -87,8 +88,8 @@ public class PostController {
 	@GetMapping(value = "/filterjobpost/{searchtext}")
 	public List<Post> filterJobPost(@PathVariable String searchtext) {
 
-		// Invoke-RestMethod -Uri "http://localhost:8086/joblisting/filterjobpost/kolkata" -Method
-		// Get
+		// Invoke-RestMethod -Uri "http://localhost:8086/joblisting/filterjobpost/kolkata" -Method Get
+		
 		return repo2.searchJobPost(searchtext);
 	}
 
