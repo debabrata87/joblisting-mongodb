@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,9 +21,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.joblisting.controller.PostController;
 import com.example.joblisting.repo.PostRepository;
 import com.example.joblisting.repo.SearchRepository;
+import com.example.joblisting.service.CallOtherMicroServices;
 import com.example.joblisting.service.UserService;
 import com.example.joblisting.service.UtilityService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 
 
@@ -45,11 +50,11 @@ class JoblistingApplicationTests {
 	@Autowired
 	UtilityService utilService;
 
-	@Autowired
-	private ObjectMapper objectMapper; // For converting objects to JSON
 
+    @MockBean
+    private CallOtherMicroServices otherMicroService; //
 	
-	/*
+	
 	@TestConfiguration
     static class TestConfig {
 
@@ -60,7 +65,7 @@ class JoblistingApplicationTests {
             // Or: return Mockito.mock(UtilityService.class);
         }
     }
-	*/
+	
 	
 	@BeforeEach
 	void setUp() {
@@ -73,11 +78,63 @@ class JoblistingApplicationTests {
 	void greetShouldReturnMessage() throws Exception {
 		String name = "John";
 
-		mockMvc.perform(get("/welcome/{name}", name)) // Perform GET request
+		mockMvc.perform(get("/joblisting/welcome/{name}", name)) // Perform GET request
 				.andExpect(status().isOk()) // Expect HTTP status 200 OK
-				.andExpect(content().string("Hello, " + name + "!")); // Expect response body
+				.andExpect(content().string("App Name : Job Listing ,  User Name : " + name + "!")); // Expect response body
 	}
 
+	@Test
+	void greetShouldReturnMessage2() throws Exception {
+		
+		String name = "John";
+		MvcResult result = mockMvc.perform(get("/joblisting/welcome/{name}", name))
+		        .andExpect(status().isOk())
+		        .andReturn();
+
+			
+		    String responseBody = result.getResponse().getContentAsString();
+		    String expected = "Hello, " + name + "!";
+
+		    assertThat(responseBody)
+		        .as("Expected welcome message to match")
+		        .isEqualTo(expected);
+	}	
+	
+	@Test
+	void testCallExternalServiceV1() throws Exception {
+	    // Arrange
+	    when(otherMicroService.callExternalServiceV1("John")).thenReturn("Mocked Response");
+
+	    // Act
+	    String response = otherMicroService.callExternalServiceV1("John");
+
+	    // Assert
+	    assertEquals("Mocked Response", response);
+	}
+	
+	
+	@Test
+	void testCallExternalServiceV2() throws Exception {
+	    
+		String name="John";
+		// Arrange
+	    when(otherMicroService.callExternalServiceV1(name)).thenReturn("Mocked Response");
+
+	   
+	    MvcResult result = mockMvc.perform(get("/joblisting/welcomev2/{name}", name)) // Perform GET request
+		.andExpect(status().isOk()) // Expect HTTP status 200 OK
+		.andReturn();
+
+		
+	    String responseBody = result.getResponse().getContentAsString();
+	    String expected = "Hello, " + name + "!";
+
+	    assertThat(responseBody)
+	        .as("Expected welcome message to match")
+	        .isEqualTo(expected);
+	    
+	}
+	
 	/*
 	@Test
 	public void testProcessMessage_withMockedStatic() {
